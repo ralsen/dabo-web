@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO Example</title>
+<!--    <script src="http://192.168.2.71:3000/socket.io/socket.io.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+
+    function sendRequest() {
+      fetch('/action', {
+        method: 'POST',
+        body: JSON.stringify({ message: 'Hello Server!' }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Aktion erfolgreich ausgeführt!');
+        } else {
+          console.error('Fehler bei der Ausführung der Aktion.');
+        }
+      })
+      .catch(error => {
+        console.error('Fehler beim Senden der Anfrage an den Server:', error);
+      });
+    }
+
+      const dataSocket = io('/data');
+      dataSocket.on('data', (data) => {
+        console.log(typeof data.date)
+        console.log(data.date);
+      });
+
+      const infoSocket = io('/info');
+      infoSocket.on('info', (info) => {
+        console.log(typeof info)
+        console.log(info);
+      });
+</script>
+  </head>
+  <body>
+    <h1>Socket.IO Example</h1>
+    <button onclick="sendRequest()">Klick mich!</button>
+  </body>
+</html>
+
+<!-- Vorschlag von cahtGPT 
+// Connect to the 'data' namespace
+const dataSocket = io('/data');
+
+dataSocket.on('connect', () => {
+  console.log('connected to /data');
+});
+
+dataSocket.on('disconnect', () => {
+  console.log('disconnected from /data');
+});
+
+// Connect to the 'info' namespace
+const infoSocket = io('/info');
+
+infoSocket.on('connect', () => {
+  console.log('connected to /info');
+});
+
+infoSocket.on('disconnect', () => {
+  console.log('disconnected from /info');
+});-->
