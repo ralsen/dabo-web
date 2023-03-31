@@ -28,6 +28,9 @@
       dataSocket.on('data', (data) => {
         console.log(typeof data.date)
         console.log(data.date);
+        console.log(data.text);
+        console.log(Object.keys(data));
+
       });
 
       const infoSocket = io('/info');
