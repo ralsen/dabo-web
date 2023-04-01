@@ -11,7 +11,7 @@ setInterval(createDropDown, 1000)
 
 function getTable() {
     //console.log("getTable()");
-    fetch('http://LC-DaBo.local:8080/sendDevInfo')
+    fetch('http://testpi.local:8080/sendDevInfo')
         .then(response => response.json())
         .then(data => {
             gdata = data;
