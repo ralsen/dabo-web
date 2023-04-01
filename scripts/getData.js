@@ -47,13 +47,20 @@ function createDeviceList(){
 function createDropDown(){
     const dropList = [];
     const selectDiagram = document.getElementById("selectDiagram");
+    selectDiagram.innerHTML = '';
     const keys = Object.keys(gdata);
     // Durchlaufen jedes Objekts in der Antwort
     keys.forEach(key => {
         console.log(key);
-        const hpc = key.substring(0, key.length - 12);
-        console.log(cfg['diagrams'][hpc][0]);
-        cfg['diagrams'][hpc].forEach(function(item) {
+        let dev = '';
+        if (cfg['config']['System'] == 'ESP'){
+            dev = 'DS1820';
+        }
+        else {
+            dev = key.substring(0, key.length - 12);
+        }
+        console.log(cfg['diagrams'][dev][0]);
+        cfg['diagrams'][dev].forEach(function(item) {
             console.log(item[0] + ' -- ' + item[1]);
             dropList.push(key + '_' + item[0]);
             const option = document.createElement("option");
