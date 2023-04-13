@@ -44,14 +44,21 @@ function createDeviceList(){
     });
 }
 
+let auswahl = "Diagramm auswählen";
+
 function createDropDown(){
     const dropList = [];
     const selectDiagram = document.getElementById("selectDiagram");
     selectDiagram.innerHTML = '';
     const keys = Object.keys(gdata);
+    const defaultOption = document.createElement("option");
+    defaultOption.text = "Diagramm auswählen";
+    defaultOption.value = "";
+    selectDiagram.add(defaultOption);    
+    console.log("Auswahl: " + auswahl);
     // Durchlaufen jedes Objekts in der Antwort
     keys.forEach(key => {
-        console.log(key);
+        //console.log(key);
         let dev = '';
         if (cfg['config']['System'] == 'ESP'){
             dev = 'DS1820';
@@ -59,20 +66,23 @@ function createDropDown(){
         else {
             dev = key.substring(0, key.length - 12);
         }
-        console.log(cfg['diagrams'][dev][0]);
+        //console.log(cfg['diagrams'][dev][0]);
         cfg['diagrams'][dev].forEach(function(item) {
-            console.log(item[0] + ' -- ' + item[1]);
+            //console.log(item[0] + ' -- ' + item[1]);
             dropList.push(key + '_' + item[0]);
             const option = document.createElement("option");
             option.text = key + '_' + item[0];
             option.value = key + '_' + item[0];
+            if (key + '_' + item[0] === auswahl) {
+                option.selected = true;
+            }
             selectDiagram.add(option);
         });
     });
-    console.log(dropList);
+    //console.log(dropList);
     selectDiagram.addEventListener("change", function() {
         // Wert der ausgewählten Option
-        const auswahl = this.value;
+        auswahl = this.value;
         console.log("Die ausgewählte Option ist: " + auswahl);
       });
     }
