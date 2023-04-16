@@ -2,6 +2,9 @@
 // HTTP-Anfrage an den Server senden
 const buttonContainer = document.getElementById("button-container");
 var gdata = '';
+export const xdata = {
+    gdata: gdata
+  };
 var selectedDevice = "";
 
 setInterval(getTable, 1000);
@@ -28,7 +31,6 @@ function createDeviceList(){
     const keys = Object.keys(gdata);
     // Durchlaufen jedes Objekts in der Antwort
     keys.forEach(key => {
-        const obj = gdata[key];
         const button = document.createElement("button");
         button.classList.add('button');
         button.textContent = key;
