@@ -11,12 +11,6 @@
         background-color: #e8e8e8;
         float: left;
       }
-      #navigation a:hover{
-        background-color: #4CAFf0;
-      }
-      #navigation a:active{
-        background-color: #eac614;
-      }
       #tabelle-container {
         table-layout: fixed;
         text-align: left;
@@ -70,3 +64,24 @@
         width: 50%;
         height: 100%;
       }
+    
+      .button.hover-effect:hover,
+      .button.active-effect:active,
+      button#submit-button:hover,
+      button#submit-button:active {
+        background-color: #4CAFf0;
+        color: #fff;
+      }
+      .button.active-effect:active,
+      button#submit-button:active {
+        background-color: #eac614;
+        color: #fff;
+      }
+		button#submit-button {
+      width: 50%;
+      display: block;
+      text-decoration: none;
+      background-color: #b9d8e9;
+      cursor: pointer;
+      font-size: 24px;
+		}
