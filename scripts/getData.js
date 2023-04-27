@@ -1,24 +1,39 @@
 // JavaScript-Code zum Abrufen der Liste von Buttons vom Server
 // HTTP-Anfrage an den Server senden
-const buttonContainer = document.getElementById("button-container");
+
+import { selectGraph } from './DiagramSelection.js'
+
+var buttonContainer = document.getElementById("button-container");
+
 var gdata = '';
-export const xdata = {
-    gdata: gdata
-  };
+window.gdata = gdata;
+export { gdata };
+
 var selectedDevice = "";
 
-setInterval(getTable, 1000);
-setInterval(createTable, 1000)
-setInterval(createDeviceList, 1000)
-setInterval(createDropDown, 1000)
+function selectDiagram() {
+    fetch('DiagramSelektion.html')
+    .then(response => response.text())
+    .then(html => {
+        document.body.innerHTML = "";
+        selectGraph()
+    });
+}
+
+var select_Diagram = document.getElementById("diagram_select");
+select_Diagram.addEventListener("click", selectDiagram);
+
+function main(){
+    setInterval(getTable, 1000);
+}
 
 function getTable() {
-    //console.log("getTable()");
-    fetch('http://testpi.local:8080/sendDevInfo')
+    fetch('http://LC-DaBo.local:8080/sendDevInfo')
         .then(response => response.json())
         .then(data => {
             gdata = data;
-            //console.log(gdata)
+            createTable();
+            createDeviceList();
         })
         .catch(error => {
             console.error('Fetch error:', error);
@@ -26,10 +41,8 @@ function getTable() {
 }
 
 function createDeviceList(){
-    //console.log('createDeviceList()');
     buttonContainer.innerHTML = "";
     const keys = Object.keys(gdata);
-    // Durchlaufen jedes Objekts in der Antwort
     keys.forEach(key => {
         const button = document.createElement("button");
         button.classList.add('button');
@@ -37,8 +50,9 @@ function createDeviceList(){
         button.id = key;
         button.classList.add('hover-effect');
         button.classList.add('active-effect');
-
-        // Klick-Event für den Button hinzufügen
+        if (gdata[key]['stat']['online'] === false) {
+            button.style.backgroundColor = 'red';
+        }
         button.addEventListener("click", function() {
             sendName(this.id);
         });
@@ -51,26 +65,12 @@ let auswahl = "Diagramm auswählen";
 function createDropDown(){
     const dropList = [];
     const selectDiagram = document.getElementById("selectDiagram");
-    selectDiagram.innerHTML = '';
+    selectDiagram.innerHTML = "";
     const keys = Object.keys(gdata);
-    const defaultOption = document.createElement("option");
-    defaultOption.text = "Diagramm auswählen";
-    defaultOption.value = "";
-    selectDiagram.add(defaultOption);    
-    console.log("Auswahl: " + auswahl);
-    // Durchlaufen jedes Objekts in der Antwort
+    const dias = cfg['diagrams']['diagrams'];
     keys.forEach(key => {
-        //console.log(key);
-        let dev = '';
-        if (cfg['config']['System'] == 'ESP'){
-            dev = 'DS1820';
-        }
-        else {
-            dev = key.substring(0, key.length - 12);
-        }
-        //console.log(cfg['diagrams'][dev][0]);
-        cfg['diagrams'][dev].forEach(function(item) {
-            //console.log(item[0] + ' -- ' + item[1]);
+        const hpc = key.substring(0, key.length - 12);
+        cfg['diagrams'][hpc].forEach(function(item) {
             dropList.push(key + '_' + item[0]);
             const option = document.createElement("option");
             option.text = key + '_' + item[0];
@@ -81,9 +81,7 @@ function createDropDown(){
             selectDiagram.add(option);
         });
     });
-    //console.log(dropList);
     selectDiagram.addEventListener("change", function() {
-        // Wert der ausgewählten Option
         auswahl = this.value;
         console.log("Die ausgewählte Option ist: " + auswahl);
       });
@@ -92,41 +90,37 @@ function createDropDown(){
 
 let table;
 function createTable(){
-    //console.log('createTable()');
     if (selectedDevice == "") {
         return;
     }
     const obj = selectedDevice;
-    //console.log("Tabelle für " + obj + " erstellen mit folgenden Werten " + Object.keys(gdata[obj]))
-    const tabelleDiv = document.querySelector("#tabelle");
+    const tableDiv = document.querySelector("#tabelle");
     if (table) {
-    tabelleDiv.removeChild(table);
+    tableDiv.removeChild(table);
     }
     table = document.createElement('table');
     let row = table.insertRow();
     const keys =  Object.keys(gdata[obj])
     keys.forEach(infokey => {
         const field = Object.keys(gdata[obj][infokey]);
-        //console.log("habe keys: " + field);
         field.forEach(fieldkey => {
             const value = gdata[obj][infokey][fieldkey];
-            if (row.cells.length >= 8) { // Wenn die aktuelle Zeile 8 Zellen enthält, füge eine neue Zeile hinzu
+            if (row.cells.length >= 8) { // if the current row has 8 cells, add a new row
             row = table.insertRow();
             }
-                // Füge die Zellen hinzu
                 const cell = row.insertCell();
                 cell.innerHTML = fieldkey + ": " + value;
-                cell.setAttribute("colspan", "2"); // Fasse die Zellen zusammen
-                cell.classList.add("cell"); // Füge die CSS-Klasse hinzu
-            //console.log("field: "+ fieldkey + " = " + value);
+                cell.setAttribute("colspan", "2");
+                cell.classList.add("cell"); 
         });
     });
-    tabelleDiv.appendChild(table);
+    tableDiv.appendChild(table);
 }
         
 function sendName(buttonId) {
     console.log("Button name: " + buttonId);
     selectedDevice = buttonId;
-//    createTable()
-    // Hier können Sie den Namen des Buttons an eine andere Funktion oder an den Server senden
+    createTable()
     }
+
+   main();

@@ -1,7 +1,9 @@
 
 const xhr = new XMLHttpRequest();
 
-window.cfg = {};
+var cfg = {};
+window.cfg = cfg;
+export { cfg };
 
 const CFG_Files = [
                     ['config', '/yml?file='],
@@ -45,10 +47,10 @@ getCFG(function() {
     console.log(key + ' -!- ', cfg[key]);
   }
   // examples to access data
-  console.log((cfg['config'].pathes.ROOT_PATH));
+/*  console.log((cfg['config'].pathes.ROOT_PATH));
   console.log((cfg['config'].Communication.HPCServerName));
   console.log(cfg['rrd']);
   console.log(cfg['diagrams'].primary[0]);
   console.log(cfg['diagrams'].primary[1][0]);
-  console.log(cfg['diagrams'].primary[0][1]);
+  console.log(cfg['diagrams'].primary[0][1]);*/
 });
