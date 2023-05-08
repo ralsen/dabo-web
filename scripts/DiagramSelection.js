@@ -8,13 +8,17 @@ function selectGraph() {
     let dias = [];
     devs = Object.keys(gdata);
     dias = (cfg['diagrams']);
+    console.log(gdata);
     for (let i = 0; i < devs.length; i++) {
         const block = document.createElement("div");
         block.id = devs[i];
         const blockHeader = document.createElement("h2");
         blockHeader.innerText = devs[i];
         block.appendChild(blockHeader);
-        const defprefix = devs[i].slice(0, -12);
+        console.log(devs[i]);
+        console.log(gdata[devs[i]]['info']['Type']);
+        /*        const defprefix = devs[i].slice(0, -18);
+        console.log(defprefix);
         const diatyps = dias[defprefix];
         for (let j = 0; j < diatyps.length; j++) {
             const checkbox = document.createElement("input");
@@ -27,7 +31,7 @@ function selectGraph() {
             block.appendChild(checkbox);
             block.appendChild(label);
             block.appendChild(document.createElement("br"));
-        }
+        }*/
         document.body.appendChild(block);
     }
   document.body.appendChild(submitButton);
