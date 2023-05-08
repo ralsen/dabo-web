@@ -28,7 +28,7 @@ function main(){
 }
 
 function getTable() {
-    fetch('http://LC-DaBo.local:8080/sendDevInfo')
+    fetch('http://192.168.1.53:8080/sendDevInfo')
         .then(response => response.json())
         .then(data => {
             gdata = data;
